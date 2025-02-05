@@ -1,0 +1,26 @@
+[package]
+name = "didcomm_soldid_resolver"
+version = "0.1.0"
+edition = "2021"
+authors = ["Chris Madison <github.com/tankcdr>"]
+description = "A Rust library for resolving Solana DID Documents for DIDCOMM messaging."
+license = "MIT"
+repository = "https://github.com/tankcdr/didcomm_soldid_resolver"
+documentation = "https://docs.rs/didcomm_soldid_resolver"
+
+[dependencies]
+didcomm = "0.4"
+solana-sdk = "1.14.11"
+solana-client = "1.14.11"
+anchor-client = "0.29.0"
+regex = "1.5.4"
+bs58 = "0.4.0"
+serde_json = "1.0"
+async-trait = "0.1.51"
+log = "0.4.14"
+env_logger = "0.10.0"
+sol_did = { git = "https://github.com/tankcdr/sol_did.git", package = "sol-did" }
+
+[dev-dependencies]
+tokio = { version = "1", features = ["full"] }
+serde_json = "1.0"
