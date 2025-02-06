@@ -1,8 +1,10 @@
 # didcomm_soldid_resolver
 
-A Rust library for resolving [Solana DID Documents](https://github.com/identity-com/sol-did) for DIDCOMM messaging. Implements the DIDResolver trait of the SICPA Digital Lab's implementtion of DIDComm.
+A Rust library for resolving [Solana DID Documents](https://github.com/identity-com/sol-did) for DIDCOMM messaging. Implements the DIDResolver trait of the SICPA Digital Lab's implementtion of DIDComm. Additionally, a W3C Doc resolver is provided for use of the Solana DID outside of DIDCOMM scenarios.
 
 ## Quick Start
+
+Using the DIDCOMM resolver:
 
 ```rust
 use didcomm_soldid_resolver::SolResolver;
@@ -10,6 +12,14 @@ use didcomm::DIDResolver;
 
 let resolver = SolResolver::default();
 let did_doc = resolver.resolve("did:sol:BYJ3xJ9spKsmHqS7d3VejkPhLizqn9ZzE3QjaQp7iTuS").await?;
+```
+
+Using the W3C DID Document resolver:
+
+```rust
+use didcomm_soldid_resolver::W3cDidDocument;
+
+let did_doc = W3cDidDocument::resolve("did:sol:BYJ3xJ9spKsmHqS7d3VejkPhLizqn9ZzE3QjaQp7iTuS").await?;
 ```
 
 ## Why Use This?
