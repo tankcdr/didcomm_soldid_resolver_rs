@@ -30,6 +30,8 @@ async fn test_resolve_devnet_did() {
 
     if let Ok(Some(doc)) = result {
         assert_eq!(doc.id, did);
+        assert_eq!(doc.key_agreement.len(), 1);
+        assert_eq!(doc.key_agreement[0], format!("{}#default", did));
         assert_eq!(doc.authentication.len(), 1);
         assert_eq!(doc.authentication[0], format!("{}#default", did));
         assert_eq!(doc.verification_method.len(), 1);

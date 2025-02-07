@@ -14,7 +14,7 @@ impl DidDocBuilder {
         Self {
             did_doc: DIDDoc {
                 id: did.to_string(),
-                key_agreement: vec![],
+                key_agreement: vec![format!("{}#default", did)],
                 authentication: vec![format!("{}#default", did)],
                 verification_method: vec![VerificationMethod {
                     id: format!("{}#default", did),
