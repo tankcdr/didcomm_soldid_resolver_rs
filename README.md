@@ -36,7 +36,7 @@ Add to your Cargo.toml:
 
 ```toml
 [dependencies]
-didcomm_soldid_resolver = { git = "https://github.com/tankcdr/didcomm_soldid_resolver" }
+didcomm_soldid_resolver = { git = "https://github.com/tankcdr/didcomm_soldid_resolver_rs.git" }
 ```
 
 ## Usage Examples
