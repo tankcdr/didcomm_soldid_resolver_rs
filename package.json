@@ -1,0 +1,18 @@
+{
+    "scripts": {
+        "test:setup": "ts-node tests/scripts/setup.ts",
+        "test:cleanup": "ts-node tests/scripts/cleanup.ts",
+        "test:add-verification-method": "ts-node tests/scripts/add-verification-method.ts",
+        "test:add-service": "ts-node tests/scripts/add-service.ts"
+    },
+    "devDependencies": {
+        "@coral-xyz/anchor": "0.29.0",
+        "@identity.com/sol-did-client": "^3.3.0",
+        "@solana/web3.js": "^1.98.0",
+        "ts-node": "^10.9.1",
+        "typescript": "^5.0.0"
+    },
+    "dependencies": {
+        "@identity.com/sol-did-idl": "^3.1.0"
+    }
+}

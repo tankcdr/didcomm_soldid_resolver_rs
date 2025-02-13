@@ -21,6 +21,7 @@ async-trait = "0.1.51"
 log = "0.4.14"
 env_logger = "0.10.0"
 sol_did = { git = "https://github.com/tankcdr/sol_did.git", package = "sol-did" }
+serial_test = "3.2.0"
 
 [dev-dependencies]
 tokio = { version = "1", features = ["full"] }

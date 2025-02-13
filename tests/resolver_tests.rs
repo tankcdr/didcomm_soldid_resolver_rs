@@ -23,17 +23,13 @@ async fn test_resolve_devnet_did() {
     let _ = env_logger::builder().is_test(true).try_init();
 
     let resolver = SolResolver::default();
-    let did = "did:sol:devnet:7pGiVVyiZrXGXLruRqVCEzsyVR2hQaFemgUu5gVYnDxs";
+    let did = "did:sol:devnet:2CE5VrAVc51cGCwk8JScajgpR8RuKmV1vxLPUpM8Lkxv";
 
     let result = resolver.resolve(did).await;
     assert!(result.is_ok());
 
     if let Ok(Some(doc)) = result {
         assert_eq!(doc.id, did);
-        assert_eq!(doc.key_agreement.len(), 1);
-        assert_eq!(doc.key_agreement[0], format!("{}#default", did));
-        assert_eq!(doc.authentication.len(), 1);
-        assert_eq!(doc.authentication[0], format!("{}#default", did));
         assert_eq!(doc.verification_method.len(), 1);
         assert!(doc.service.is_empty());
         assert_eq!(doc.verification_method[0].id, format!("{}#default", did));
@@ -47,7 +43,7 @@ async fn test_resolve_devnet_did() {
         assert!(
             matches!(
                     &doc.verification_method[0].verification_material,
-                    VerificationMaterial::Base58 { public_key_base58 } if public_key_base58 == "7pGiVVyiZrXGXLruRqVCEzsyVR2hQaFemgUu5gVYnDxs"
+                    VerificationMaterial::Base58 { public_key_base58 } if public_key_base58 == "2CE5VrAVc51cGCwk8JScajgpR8RuKmV1vxLPUpM8Lkxv"
                 )
         );
     }
@@ -74,7 +70,7 @@ async fn test_resolve_localnet_did() {
 }
 */
 
-#[tokio::test]
+#[tokio::test(flavor = "multi_thread")]
 async fn test_resolve_invalid_did_format() {
     let resolver = SolResolver::default();
     let did = "invalid:did:format";
@@ -83,7 +79,7 @@ async fn test_resolve_invalid_did_format() {
     assert!(result.is_err());
 }
 
-#[tokio::test]
+#[tokio::test(flavor = "multi_thread")]
 async fn test_resolve_invalid_address_length() {
     let resolver = SolResolver::default();
     let did = "did:sol:abc123"; // Too short address
@@ -92,7 +88,7 @@ async fn test_resolve_invalid_address_length() {
     assert!(result.is_err());
 }
 
-#[tokio::test]
+#[tokio::test(flavor = "multi_thread")]
 async fn test_resolve_non_base58_address() {
     let resolver = SolResolver::default();
     let did = "did:sol:!!!invalid$$$base58!!!address!!!";
@@ -105,15 +101,13 @@ async fn test_resolve_non_base58_address() {
 async fn test_chainless_did_resolution() {
     let resolver = SolResolver::default();
     // Using a random valid base58 address that likely doesn't have on-chain data
-    let did = "did:sol:5xqXJR7TQZwZEyqWPJVWp6vRfv4tXiWbPwmypYPnGoVc";
+    let did = "did:sol:2CE5VrAVc51cGCwk8JScajgpR8RuKmV1vxLPUpM8Lkxv";
 
     let result = resolver.resolve(did).await;
     assert!(result.is_ok());
 
     if let Ok(Some(doc)) = result {
         assert_eq!(doc.id, did);
-        assert_eq!(doc.authentication.len(), 1);
-        assert_eq!(doc.authentication[0], format!("{}#default", did));
         assert_eq!(doc.verification_method.len(), 1);
         assert!(doc.service.is_empty());
     }

@@ -3,6 +3,7 @@ use didcomm::did::ServiceKind;
 use didcomm::did::VerificationMaterial;
 use serde_json::json;
 use sol_did::state::DidAccount;
+use log::debug;
 
 pub struct DidDocBuilder {
     did_doc: DIDDoc,
@@ -11,11 +12,12 @@ pub struct DidDocBuilder {
 impl DidDocBuilder {
     /// Creates a minimal DIDDoc with only the DID and a default verification method.
     pub fn new(did: &str, address: &str) -> Self {
+        debug!("Creating new DIDDoc: {}", did);
         Self {
             did_doc: DIDDoc {
                 id: did.to_string(),
-                key_agreement: vec![format!("{}#default", did)],
-                authentication: vec![format!("{}#default", did)],
+                key_agreement: vec![],
+                authentication: vec![],
                 verification_method: vec![VerificationMethod {
                     id: format!("{}#default", did),
                     type_: VerificationMethodType::Ed25519VerificationKey2018,
@@ -31,6 +33,7 @@ impl DidDocBuilder {
 
     /// Adds on-chain data without overwriting defaults
     pub fn with_onchain_data(mut self, did_account: &DidAccount, did: &str) -> Self {
+        debug!("Adding on-chain data to DIDDoc: {}", did);
         // Append on-chain verification methods (without overwriting defaults)
         self.did_doc.key_agreement.extend(
             did_account.verification_methods
