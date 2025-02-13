@@ -160,7 +160,6 @@ fn extract_service_details(service_endpoint: &ServiceKind) -> Option<(String, St
     None
 }
 
-/* 
 #[tokio::test(flavor = "multi_thread", worker_threads = 1)]
 #[serial]
 async fn test_full_did_lifecycle() -> Result<(), Box<dyn std::error::Error>> {
@@ -177,22 +176,23 @@ async fn test_full_did_lifecycle() -> Result<(), Box<dyn std::error::Error>> {
 
     // Ensure cleanup always runs, even if a test fails
     let _guard = TestGuard { context: &context };
-
-    // Test initial state
-    let initial_doc = context.resolve().await?.unwrap();
-    assert_eq!(initial_doc.verification_method.len(), 1);
-
-    // Add verification method
-    context.add_verification_method().await?;
-    let updated_doc = context.resolve().await?.unwrap();
-    assert_eq!(updated_doc.verification_method.len(), 2);
-
     // Add service
     context.add_service().await?;
-    let final_doc = context.resolve().await?.unwrap();
-    assert!(!final_doc.service.is_empty());
+    // Add verification method
+    context.add_verification_method().await?;
 
-    context.cleanup()?;
+    // Resolve and verify
+    let result = context.resolve().await?;
+
+    assert!(result.is_some());
+    if let Some(doc) = result {
+        assert_eq!(doc.id, context.did);
+        assert_eq!(doc.service.len(), 1); // Should have 1 service
+        assert_eq!(doc.service[0].id, format!("{}#{}", context.did, "agent"));
+
+        assert_eq!(doc.id, context.did);
+        assert_eq!(doc.verification_method.len(), 2); // Default + new method
+    }
+
     Ok(())
 }
-*/

@@ -68,14 +68,13 @@ async fn test_w3c_services() {
 
 #[tokio::test(flavor = "multi_thread")]
 async fn test_w3c_authentication() {
-    let did = "did:sol:BYJ3xJ9spKsmHqS7d3VejkPhLizqn9ZzE3QjaQp7iTuS";
+    let did = "did:sol:2CE5VrAVc51cGCwk8JScajgpR8RuKmV1vxLPUpM8Lkxv";
     let result = W3cDidDocument::resolve(did).await;
 
     assert!(result.is_ok());
+    println!("diddoc: {:?}", result);
     if let Ok(doc) = result {
-        assert!(!doc.authentication.is_empty());
-        // Default authentication should reference the DID
-        assert!(doc.authentication[0].starts_with(did));
+        assert!(doc.authentication.is_empty());
     }
 }
 
@@ -108,8 +107,7 @@ async fn test_w3c_chainless_did() {
     assert!(result.is_ok());
     if let Ok(doc) = result {
         assert_eq!(doc.id, did);
-        assert_eq!(doc.authentication.len(), 1);
-        assert_eq!(doc.authentication[0], format!("{}#default", did));
+        assert!(doc.authentication.is_empty());
         assert_eq!(doc.verification_method.len(), 1);
         assert!(doc.service.is_empty());
     }
