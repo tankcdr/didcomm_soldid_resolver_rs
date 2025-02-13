@@ -3,13 +3,13 @@ use crate::errors::*;
 use crate::did_doc_builder::*;
 
 use std::str::FromStr;
-use solana_sdk::pubkey::Pubkey;
 use anchor_client::{ anchor_lang::AccountDeserialize, solana_client::rpc_client::RpcClient };
 use didcomm::{ did::{ DIDDoc, DIDResolver }, error::Error, error::ErrorKind };
 use regex::Regex;
 use sol_did::state::DidAccount;
 use async_trait::async_trait;
 use log::{ info, debug };
+use solana_sdk::pubkey::Pubkey;
 
 // Resolver struct
 pub struct SolResolver {}
@@ -24,10 +24,10 @@ impl SolResolver {
     // Function to derive the DID account address
     fn derive_did_account(did_pubkey: &Pubkey) -> (Pubkey, u8) {
         let seed = "did-account";
-        Pubkey::find_program_address(
-            &[seed.as_bytes(), did_pubkey.as_ref()],
-            &Pubkey::from_str(DID_PROGRAM_ID).unwrap()
-        )
+
+        let program_id = Pubkey::from_str("didso1Dpqpm4CsiCjzP766BGY89CAdD6ZBL68cRhFPc").unwrap();
+
+        Pubkey::find_program_address(&[seed.as_bytes(), &did_pubkey.as_ref()], &program_id)
     }
 }
 
@@ -37,7 +37,7 @@ impl DIDResolver for SolResolver {
         &self,
         did: &str
     ) -> std::result::Result<Option<DIDDoc>, didcomm::error::Error> {
-        debug!("Resolving DID: {}", did);
+        info!("Resolving DID: {}", did);
 
         // Validate DID format using regex
         let re = Regex::new(DID_SOL_REGEX).map_err(|_|
@@ -70,8 +70,8 @@ impl DIDResolver for SolResolver {
             );
         }
 
-        info!("Extracted Network: {}", network);
-        info!("Extracted Address: {}", address);
+        debug!("Extracted Network: {}", network);
+        debug!("Extracted Address: {}", address);
 
         // Determine the appropriate RPC URL based on network
         let rpc_url = match network {
@@ -87,11 +87,11 @@ impl DIDResolver for SolResolver {
         let did_pubkey = Pubkey::from_str(address).map_err(|_m|
             Error::msg(ErrorKind::Malformed, SolResolverError::InvalidSolanaAddress.to_string())
         )?;
-        info!("Derived Solana Pubkey: {:?}", did_pubkey);
+        debug!("Derived Solana Pubkey: {:?}", did_pubkey);
 
         // Derive the DID account
         let (did_account_pubkey, _) = Self::derive_did_account(&did_pubkey);
-        info!("Derived DID Account Pubkey: {:?}", did_account_pubkey);
+        debug!("Derived DID Account Pubkey: {:?}", did_account_pubkey);
 
         // After deriving did_account_pubkey
         let account_data_result = rpc_client.get_account_data(&did_account_pubkey);

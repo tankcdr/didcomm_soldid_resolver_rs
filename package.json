@@ -1,9 +1,9 @@
 {
     "scripts": {
-        "test:setup": "ts-node tests/setup.ts",
-        "test:cleanup": "ts-node tests/cleanup.ts",
-        "test:add-verification-method": "ts-node tests/add-verification-method.ts",
-        "test:add-service": "ts-node tests/add-service.ts"
+        "test:setup": "ts-node tests/scripts/setup.ts",
+        "test:cleanup": "ts-node tests/scripts/cleanup.ts",
+        "test:add-verification-method": "ts-node tests/scripts/add-verification-method.ts",
+        "test:add-service": "ts-node tests/scripts/add-service.ts"
     },
     "devDependencies": {
         "@coral-xyz/anchor": "0.29.0",

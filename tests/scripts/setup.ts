@@ -1,22 +1,11 @@
-import {
-  Connection,
-  Keypair,
-  LAMPORTS_PER_SOL,
-  SendTransactionError,
-} from "@solana/web3.js";
+import { Connection, SendTransactionError } from "@solana/web3.js";
 import {
   DidSolIdentifier,
   DidSolService,
   INITIAL_MIN_ACCOUNT_SIZE,
 } from "@identity.com/sol-did-client";
 import { TestAnchorWallet } from "./TestAnchorWallet";
-import fs from "fs";
-
-function loadKeypair(filePath: string): Keypair {
-  const secretKeyString = fs.readFileSync(filePath, "utf8");
-  const secretKey = Uint8Array.from(JSON.parse(secretKeyString));
-  return Keypair.fromSecretKey(secretKey);
-}
+import { loadKeypair } from "./utils";
 
 async function setup() {
   const connection = new Connection(
@@ -39,7 +28,9 @@ async function setup() {
     });
 
     // Initialize the DID account, explicitly passing the wallet for signing.
-    await service.initialize(INITIAL_MIN_ACCOUNT_SIZE).rpc();
+    let transaction = await service.initialize(INITIAL_MIN_ACCOUNT_SIZE).rpc();
+    await connection.confirmTransaction(transaction, "finalized");
+    console.log("DID account initialized", transaction);
 
     let did_doc = await service.resolve();
     console.log(JSON.stringify(did_doc, null, 2));

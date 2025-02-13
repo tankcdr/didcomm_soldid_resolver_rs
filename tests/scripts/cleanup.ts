@@ -1,19 +1,7 @@
 import { Connection, Keypair, PublicKey } from "@solana/web3.js";
-import {
-  DidSolIdentifier,
-  DidSolService,
-  ExtendedCluster,
-} from "@identity.com/sol-did-client";
-import fs from "fs";
+import { DidSolIdentifier, DidSolService } from "@identity.com/sol-did-client";
 import { TestAnchorWallet } from "./TestAnchorWallet";
-import path from "path";
-import os from "os";
-
-function loadKeypair(filePath: string): Keypair {
-  const secretKeyString = fs.readFileSync(filePath, "utf8");
-  const secretKey = Uint8Array.from(JSON.parse(secretKeyString));
-  return Keypair.fromSecretKey(secretKey);
-}
+import { loadKeypair } from "./utils";
 
 async function cleanup() {
   const connection = new Connection(
